@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-
 # Abstract Base Class
 class StationAsset(ABC):
     def __init__(self, name):
@@ -11,7 +10,7 @@ class StationAsset(ABC):
         pass
 
 
-# FuelDispenser class
+# Child Class 1
 class FuelDispenser(StationAsset):
     def __init__(self, name, liters_sold, price_per_liter):
         super().__init__(name)
@@ -22,7 +21,7 @@ class FuelDispenser(StationAsset):
         return self.liters_sold * self.price_per_liter
 
 
-# CarWash class
+# Child Class 2
 class CarWash(StationAsset):
     def __init__(self, name, cars_washed, price_per_car):
         super().__init__(name)
@@ -31,22 +30,3 @@ class CarWash(StationAsset):
 
     def calculate_revenue(self):
         return self.cars_washed * self.price_per_car
-
-
-
-
-# Create station assets
-assets = [
-    FuelDispenser("Pump 1", 500, 1.5),
-    FuelDispenser("Pump 2", 300, 1.5),
-    CarWash("Wash Bay", 50, 10)
-]
-
-total_revenue = 0
-
-for asset in assets:
-    revenue = asset.calculate_revenue()
-    print(asset.name, "Revenue:", revenue)
-    total_revenue += revenue
-
-print("\nTotal Station Revenue:", total_revenue)
