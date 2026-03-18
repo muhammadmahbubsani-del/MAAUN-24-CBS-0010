@@ -1,32 +1,36 @@
 from collections import deque
 
 # 1. Initialize
-# application_inbox uses deque for efficient FIFO (First-In-First-Out)
-application_inbox = deque() 
-# processed_history is a list used as a LIFO (Last-In-First-Out) stack
-processed_history = []
+application_inbox = deque()           # ← Queue (FIFO)
+processed_history = []                # ← Stack (LIFO)
 
-# 2. Ingest Data
-messy_startups = ["  TechCorp ", "bio-gen", "  CLOUDNEXUS  ", "Data_Flow  "]
+# 2. Ingest messy data
+messy_names = [
+    "  TechCorp   ",
+    "Bio-gen",
+    "  quantumLeap  ",
+    "nanoHealth!"
+]
 
-for name in messy_startups:
-    # Clean: lowercase and remove surrounding whitespace
-    cleaned_name = name.strip().lower()
-    application_inbox.append(cleaned_name)
+for raw in messy_names:
+    clean_name = raw.strip().lower()          # clean + lowercase
+    application_inbox.append(clean_name)      # add to queue (right side)
 
-# 3. Process (FIFO)
-print("--- Processing Applications ---")
-while application_inbox:
-    # popleft() ensures we process the first one that entered (FIFO)
-    current_app = application_inbox.popleft()
-    print(f"Approving: {current_app}")
-    
-    # Push to history stack
-    processed_history.append(current_app)
+print("Inbox:", list(application_inbox))
+# Expected: ['techcorp', 'bio-gen', 'quantumleap', 'nanohealth!']
 
-# 4. Undo (LIFO)
-print("\n--- Simulating a Mistake ---")
+# 3. Process FIFO (normal approval flow)
+while application_inbox:                    # while queue not empty
+    name = application_inbox.popleft()      # take from front
+    print(f"Approving: {name}")
+    processed_history.append(name)          # push to stack
+
+print("\nAll processed. History stack:", processed_history)
+
+# 4. Simulate a mistake → Undo last action (LIFO)
 if processed_history:
-    # pop() takes the most recent item added (LIFO)
-    last_processed = processed_history.pop()
-    print(f"Reverting approval for: {last_processed}")
+    reverted = processed_history.pop()      # pop from end (last approved)
+    print(f"Reverting approval for: {reverted}")
+    application_inbox.append(reverted)      # put it back to queue
+
+print("Inbox after revert:", list(application_inbox))
